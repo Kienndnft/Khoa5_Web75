@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "id": "US001",
+      "userName": "MindX"
+    },
+    {
+      "id": "US002",
+      "useName": "Nobi Nobita"
+    },
+    {
+      "id": "US234",
+      "userName": "Dung"
+    }
+  ],
+  "posts": [
+    {
+      "id": "PS001",
+      "content": "Nội dung học về JSON Server!",
+      "authorId": "US001"
+    },
+    {
+      "content": "Khóa học HTML",
+      "authorId": "US002",
+      "id": "PS753"
+    },
+    {
+      "id": "PS355",
+      "content": "Khóa học CSS",
+      "authorId": "US002"
+    }
+  ],
+  "comments": [
+    {
+      "id": "CMT001",
+      "postId": "PS001",
+      "content": "Bài học này rất ý nghĩa! Cảm ơn MindX!",
+      "authorId": "US002"
+    },
+    {
+      "id": "CMT820",
+      "content": "Thank you .....",
+      "postId": "PS753",
+      "authorId": "US002"
+    }
+  ]
+}
