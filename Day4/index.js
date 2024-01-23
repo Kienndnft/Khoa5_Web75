@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { isObjectIdOrHexString } from 'mongoose';
 
 //Khoi tao server web
 const server = express();
@@ -76,11 +76,13 @@ server.post('/posts', async (req, res) => {
 
     //validate input
     if (!content) throw new Error('content is required');
-    if (!authorId) throw new Error('authorId is required');
+    if (!isObjectIdOrHexString(authorId)) throw new Error('authorId is not valid');
 
     //Check authorId co thuoc users
     const validUserId = await userModel.findById(authorId);
     if (!validUserId) throw new Error('authorId does not exist');
+
+    //isObjectIdOrHexString(validUserId);
     //Luu y: neu authorId khong du ky tu > lenh findById se tra ve loi > xu ly the nao?
 
     //tao moi user tren mongodb
