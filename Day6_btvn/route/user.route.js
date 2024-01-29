@@ -1,13 +1,29 @@
 import express from 'express';
-import { validationUser } from '../middleware/user.validation.js';
-import { getUsers, getUserId } from '../controller/user.controller.js';
+import {
+  getUsers,
+  getUserId,
+  createUser,
+  updateUserId,
+  deleteUserId,
+} from '../controller/user.controller.js';
+import {
+  validationBodyUser,
+  validationIsAdmin,
+  validationPasswordUser,
+  validationUser,
+} from '../middleware/validation.js';
 
 const userRoute = express.Router();
 
-userRoute.get('/', validationUser, getUsers);
+//Tao user moi
+userRoute.post('/', validationBodyUser, createUser);
+
+//Admin only
+userRoute.get('/', validationIsAdmin, getUsers);
+
+//User & admin
 userRoute.get('/:userId', validationUser, getUserId);
-userRoute.post('/', getUsers);
-userRoute.put('/:postId', validationUser, getUsers);
-userRoute.delete('/:postId', validationUser, getUsers);
+userRoute.put('/:userId', validationUser, validationPasswordUser, updateUserId); //chi thay doi thong tin password
+userRoute.delete('/:userId', validationUser, deleteUserId);
 
 export { userRoute };
