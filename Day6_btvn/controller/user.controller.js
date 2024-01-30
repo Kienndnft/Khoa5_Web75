@@ -45,8 +45,12 @@ export const updateUserId = async (req, res) => {
     const { password } = req.body;
     const { userId } = req.params;
 
+    //Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashesPassword = await bcrypt.hash(password, salt);
+
     //update password user
-    await UserModel.findByIdAndUpdate(userId, { password }, { new: true });
+    await UserModel.findByIdAndUpdate(userId, { password: hashesPassword }, { new: true });
 
     res.status(201).send({ data: null, message: 'Updated password successfully', success: true });
   } catch (error) {
