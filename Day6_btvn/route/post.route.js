@@ -11,7 +11,7 @@ import { validationBodyPost, validationIsAdmin, validationPost } from '../middle
 const postRoute = express.Router();
 
 //admin only
-postRoute.get('/', validationIsAdmin, getPosts); //Validate admin thi mới get all posts
+postRoute.get('/', validationIsAdmin, getPosts); //Validate admin thi mới được get all posts
 
 //user & admin
 postRoute.get('/:postId', validationPost, getPostId); //Validate user của post thì mới get được postId, admin thì không cần validate

@@ -2,6 +2,7 @@ import { isObjectIdOrHexString } from 'mongoose';
 import { PostModel } from '../model/post.model.js';
 import Joi from 'joi';
 import { UserModel } from '../model/user.model.js';
+import { CommentModel } from '../model/comments.model.js';
 
 //================================
 export const validationIsAdmin = (req, res, next) => {
@@ -108,5 +109,70 @@ export const validationPasswordUser = async (req, res, next) => {
   }
 
   next();
+};
+//================================
+export const validationLoginUser = async (req, res, next) => {
+  const data = req.body;
+
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+  });
+
+  const { error } = schema.validate(data);
+
+  if (error) {
+    return res.status(400).send({ data: null, message: error.details[0].message, success: false });
+  }
+
+  next();
+};
+//================================
+export const validationBodyComment = async (req, res, next) => {
+  const data = req.body;
+
+  const schema = Joi.object({
+    postId: Joi.string().required(),
+    content: Joi.string().required(),
+  });
+
+  const { error } = schema.validate(data);
+
+  if (error) {
+    return res.status(400).send({ data: null, message: error.details[0].message, success: false });
+  }
+
+  //Check postId co dung dinh dang
+  if (!isObjectIdOrHexString(data.postId))
+    return res.status(400).send({ data: null, message: 'postId is not valid', success: false });
+
+  //Check postId co ton tai
+  const current = await PostModel.findById(data.postId);
+  if (!current)
+    return res.status(400).send({ data: null, message: 'postId does not exist', success: false });
+
+  next();
+};
+//================================
+export const validationComment = async (req, res, next) => {
+  try {
+    const { user, isAdmin } = req;
+    const { commentId } = req.params;
+
+    //Check Id co hop le
+    if (!isObjectIdOrHexString(commentId)) throw new Error('Id is not valid');
+
+    //Check commentId co ton tai
+    const current = await CommentModel.findById(commentId);
+    if (!current) throw new Error('commentId does not exist');
+
+    // Neu user khong phai admin va userId khong phai la nguoi tao post/comments
+    if (!isAdmin && current.userId !== user._id.toString())
+      throw new Error('Insufficient permissions userId');
+
+    next();
+  } catch (error) {
+    return res.status(403).send({ data: null, message: error.message, success: false });
+  }
 };
 //================================

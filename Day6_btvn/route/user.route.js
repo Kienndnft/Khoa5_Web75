@@ -9,14 +9,19 @@ import {
 import {
   validationBodyUser,
   validationIsAdmin,
+  validationLoginUser,
   validationPasswordUser,
   validationUser,
 } from '../middleware/validation.js';
 
 const userRoute = express.Router();
+//const userPublicRoute = express.Router();
 
 //Tao user moi
 userRoute.post('/', validationBodyUser, createUser);
+
+//Login
+//userPublicRoute.post('/', validationLoginUser, createUser);
 
 //Admin only
 userRoute.get('/', validationIsAdmin, getUsers);

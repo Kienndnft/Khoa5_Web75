@@ -20,11 +20,13 @@ server.use(morgan('combined'));
 
 //Route public , khong can authen
 server.use('/register', publicRouteMiddleware);
+//server.use('/login', publicRouteMiddleware);
 
 //Authen cho toan bo server
 server.use(authenticationMiddleware);
 
 server.use('/register', userRoute);
+//server.use('/login', userRoute);
 server.use('/users', authorizationMiddleware, userRoute);
 server.use('/posts', authorizationMiddleware, postRoute);
 server.use('/comments', authorizationMiddleware, commentRoute);

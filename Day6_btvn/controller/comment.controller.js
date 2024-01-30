@@ -68,20 +68,11 @@ export const createComment = async (req, res) => {
     const { content, postId } = req.body;
     const { user } = req;
 
-    //validate input
-    if (!content) throw new Error('content is required');
-    if (!postId) throw new Error('postId is required');
-
-    //Check postId co ton tai
-    const current = await PostModel.findById(postId);
-    if (!current) throw new Error('postId does not exist');
-
     //Luu vao db
     const newComment = await CommentModel.create({
       content,
       postId,
       userId: user._id,
-      date: new Date().toISOString(),
     });
 
     res
@@ -94,12 +85,8 @@ export const createComment = async (req, res) => {
 //=========================================
 export const updateCommentId = async (req, res) => {
   try {
-    const { content, postId } = req.body;
+    const { content } = req.body;
     const { commentId } = req.params;
-
-    //validate input
-    if (!content) throw new Error('content is required');
-    if (!postId) throw new Error('postId is required');
 
     //update comment
     const updateItem = await CommentModel.findByIdAndUpdate(commentId, { content }, { new: true });

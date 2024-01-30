@@ -1,4 +1,5 @@
 import { UserModel } from '../model/user.model.js';
+import bcrypt from 'bcrypt';
 
 //=========================================
 export const getUsers = async (req, res) => {
@@ -21,11 +22,15 @@ export const createUser = async (req, res) => {
     const valid = await UserModel.findOne({ username });
     if (valid) throw new Error('username already exists');
 
+    //Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashesPassword = await bcrypt.hash(password, salt);
+
     //Tao moi user tren mongodb
     const newUser = await UserModel.create({
       username,
       email,
-      password,
+      password: hashesPassword,
       roles: ['user'],
     });
 
