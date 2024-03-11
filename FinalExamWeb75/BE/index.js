@@ -21,7 +21,7 @@ server.use('/index', (req, res) => {
 });
 
 mongoose.connect(`${process.env.MONGO_CONNECT}/finalExamWeb75`).then(() => {
-  server.listen(process.env.PORT, () => {
+  server.listen(process.env.PORT || 8080, () => {
     console.log('Server running...');
   });
 });
